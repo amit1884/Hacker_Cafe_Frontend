@@ -4,26 +4,26 @@ import Navbar from './components/Navbar';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
-// import {reducer,initialState} from "./Reducers/userReducer"
-// export const UserContext=createContext()
+import {reducer,initialState} from "./Reducers/userReducer"
+export const UserContext=createContext()
 const Routing=()=>{
 
-//   const history=useHistory()
-//   const {state,dispatch}=useContext(UserContext)
-//   useEffect(()=>{
+  const history=useHistory()
+  const {state,dispatch}=useContext(UserContext)
+  useEffect(()=>{
 
-//     const user=JSON.parse(localStorage.getItem("user"))
+    const user=JSON.parse(localStorage.getItem("user"))
 
-//     console.log(user)
-//     if(user){
-//       dispatch({type:"USER",payload:user})
-//       // history.push('/')
-//     }
-//     else{
-//       if(!history.location.pathname.startsWith('/reset'))
-//       history.push("/login")
-//     }
-//   },[])
+    console.log(user)
+    if(user){
+      dispatch({type:"USER",payload:user})
+      history.push('/')
+    }
+    // else{
+    //   if(!history.location.pathname.startsWith('/reset'))
+    //   history.push("/login")
+    // }
+  },[])
   return(
     <Switch>
       <Route exact path="/">
@@ -40,15 +40,14 @@ const Routing=()=>{
 }
 
 function App() {
-//   const [state,dispatch]=useReducer(reducer,initialState)
+  const [state,dispatch]=useReducer(reducer,initialState)
   return (
-    //   <UserContext.Provider value ={{state,dispatch}}>
+      <UserContext.Provider value ={{state,dispatch}}>
         <BrowserRouter>
           <Navbar/>
-          {/* {state?<BottomNav/>:null} */}
           <Routing/>
         </BrowserRouter>
-    //   </UserContext.Provider>
+      </UserContext.Provider>
   );
 }
 

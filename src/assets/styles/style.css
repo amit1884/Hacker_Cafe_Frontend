@@ -49,6 +49,25 @@
     padding:10px;
 }
 
+.title{
+    font-size: 25px;
+    font-weight: 600;
+    font-family: 'Fraunces', serif;
+    margin-bottom: 10px;
+}
+.details{
+    font-size: 17px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.price{
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: #ee491b;
+    padding:6px 20px;
+    border-radius: 10px;
+    color:#fff
+}
 /* Login Page */
 .login_container{
     display: flex;
@@ -56,6 +75,7 @@
     align-items: center;
     height: 110vh;
     background-color:#f5f8fd;
+    /* overflow: hidden; */
 }
 .login_wrapper{
     display: flex;
@@ -69,6 +89,7 @@
     padding:20px;
     width:400px;
     min-height: 400px;
+    /* margin-top:20%; */
 }
 .form_container{
     display: flex;
@@ -178,6 +199,7 @@
     background-color: transparent;
     border:none;
     outline:none !important;
+    /* width:100%; */
 }
 .modal_body{
     background-color: #fff;
@@ -190,4 +212,26 @@
     display: flex;
     flex-wrap: wrap;
     
+}
+
+.modal_desc{
+    display: flex;
+    flex-direction: column;
+}
+.user_details table{
+    width:100%;
+    padding:10px;
+    margin:10px;
+}
+.user_details table td{
+    font-size: 20px;
+    padding:6px;
+}
+.table_head{
+    font-size: 20px;
+    font-weight: 600;
+}
+.user_id img{
+    width:500px;
+    height:350px;
 }

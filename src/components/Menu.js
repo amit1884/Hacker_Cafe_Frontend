@@ -94,9 +94,9 @@ export default function Menu() {
                         <img src ={items.img}alt="items"/>
                         </div>
                         <div className="item_details">
-                          <p>{items.title}</p>
-                          <p>{items.details}</p>
-                          <p>{items.price}</p>
+                          <p class="title">{items.title}</p>
+                          <p class="details">{items.details}</p>
+                          <p class="price">Rs.{items.price}.00</p>
                         </div>
                       </div>
                   )
@@ -114,9 +114,9 @@ export default function Menu() {
                         <img src ={items.img}alt="items"/>
                         </div>
                         <div className="item_details">
-                          <p>{items.title}</p>
-                          <p>{items.details}</p>
-                          <p>{items.price}</p>
+                          <p className="title">{items.title}</p>
+                          <p className="details">{items.details}</p>
+                          <p className="price">Rs.{items.price}.00</p>
                         </div>
                       </div>
                   )
@@ -134,9 +134,9 @@ export default function Menu() {
                         <img src ={items.img}alt="items"/>
                         </div>
                         <div className="item_details">
-                          <p>{items.title}</p>
-                          <p>{items.details}</p>
-                          <p>{items.price}</p>
+                          <p className="title">{items.title}</p>
+                          <p className="details">{items.details}</p>
+                          <p className="price">Rs.{items.price}.00</p>
                         </div>
                       </div>
                   )
@@ -154,9 +154,9 @@ export default function Menu() {
                         <img src ={items.img}alt="items"/>
                         </div>
                         <div className="item_details">
-                          <p>{items.title}</p>
-                          <p>{items.details}</p>
-                          <p>{items.price}</p>
+                          <p className="title">{items.title}</p>
+                          <p className="details">{items.details}</p>
+                          <p className="price">Rs.{items.price}.00</p>
                         </div>
                       </div>
                   )
@@ -174,9 +174,9 @@ export default function Menu() {
                         <img src ={items.img}alt="items"/>
                         </div>
                         <div className="item_details">
-                          <p>{items.title}</p>
-                          <p>{items.details}</p>
-                          <p>{items.price}</p>
+                          <p className="title">{items.title}</p>
+                          <p className="details">{items.details}</p>
+                          <p className="price">Rs.{items.price}.00</p>
                         </div>
                       </div>
                   )
