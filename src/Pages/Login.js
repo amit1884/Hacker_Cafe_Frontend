@@ -29,11 +29,12 @@ function Login() {
             })
             .then(res=>res.json())
             .then(data=>{
-                // console.log(data)
-                if(data.error){
-                    console.log(data.error)
+                console.log(data)
+                if(data.status===0){
+                    setError(true)
+                    setErrorMsg(data.message)
                 }
-                else{
+                else if(data.status===1){
                     localStorage.setItem("jwt",data.token)
                     localStorage.setItem("user",JSON.stringify(data.user))
                     dispatch({type:"USER",payload:data.user})
@@ -54,7 +55,7 @@ function Login() {
                     {Error?<p>{ErrorMsg}</p>:null}
                 </div>
                 <form className="form_container" onSubmit={SubmitHandler}>
-                    <input type="text" placeholder="amit@apple.com" value={Email} onChange={(e)=>setEmail(e.target.value)}/>
+                    <input type="text" placeholder="amit@microsoft.com" value={Email} onChange={(e)=>setEmail(e.target.value)}/>
                     <input type="password" placeholder="123456" value={Password} onChange={(e)=>setPassword(e.target.value)}/>
                     <button className="login_btn">Login</button>
                 </form>

@@ -17,12 +17,12 @@ const Routing=()=>{
     console.log(user)
     if(user){
       dispatch({type:"USER",payload:user})
-      history.push('/')
+      // history.push('/')
     }
-    // else{
-    //   if(!history.location.pathname.startsWith('/reset'))
-    //   history.push("/login")
-    // }
+    else{
+      if(!history.location.pathname.startsWith('/reset'))
+      history.push("/login")
+    }
   },[])
   return(
     <Switch>

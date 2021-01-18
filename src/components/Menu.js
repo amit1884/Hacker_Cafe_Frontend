@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -7,10 +7,14 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import {BreakfastMenu,LunchMenu,BreadMenu,DrinksMenu,DessertMenu} from '../assets/data/menu'
+import {Button} from '@material-ui/core'
+import _ from 'lodash'
+import axios from 'axios';
+var i=0;
+var totalPrice=0;
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
+ 
   return (
     <div
       role="tabpanel"
@@ -46,13 +50,50 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     width: '90%',
   },
+  pricebtn:{
+    background:'orange',
+    fontSize:'20px',
+    fontWeight:'500',
+    color:'#fff'
+  },
+  addbtn:{
+    // background:'orange',
+    fontSize:'20px',
+    fontWeight:'500',
+    color:'#fff'
+  },
+  orderbtn:{
+    position:'fixed',
+    top:'50%',
+    left:'0',
+    zIndex:'199',
+    backgroundColor:' #1e1768',
+    color:'#fff',
+    marginTop:'10px'
+  }
 }));
 
 export default function Menu() {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
+  // const [AddStatus,setAddStatus]=useState(true)
+  const [MenuArray,setMenuArray]=useState([])
+  const [CurrOrder,setCurrOrder]=useState([])
+  const [OpenOrder,setOpenOrder]=useState(false)
+  useEffect(()=>{
 
+    axios.get(`http://localhost:5000/menu`,{
+      headers:{
+        "Authorization":"Bearer "+localStorage.getItem('jwt')
+      }
+    })
+    .then(res=>{
+      console.log(res.data)
+      setMenuArray(res.data.data)
+    })
+    .catch(err=>console.log(err))
+  },[])
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -60,6 +101,22 @@ export default function Menu() {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
+
+ const AddItem=(item)=>{
+  console.log(item) 
+  let newData=[...CurrOrder,{item}]
+  setCurrOrder(newData)
+  // localStorage.setItem('Order',JSON.stringify(CurrOrder))
+  console.log(CurrOrder)
+ }
+ const RemoveItem=(item)=>{
+  let newData=CurrOrder;
+  newData=newData.pull()
+ }
+ const ClearOrder=()=>{
+   console.log('order clear')
+   setCurrOrder([])
+ }
 
   return (
     <div className={classes.root}>
@@ -87,19 +144,28 @@ export default function Menu() {
         <TabPanel value={value} index={0} dir={theme.direction}>
           <div className="menu_container">
           {
-              BreakfastMenu.map((items=>{
+              MenuArray.map((items=>{
+                if(items.type===1)
+                {
                   return(
-                      <div className="menu_card">
-                        <div className="item_img">
-                        <img src ={items.img}alt="items"/>
-                        </div>
-                        <div className="item_details">
-                          <p class="title">{items.title}</p>
-                          <p class="details">{items.details}</p>
-                          <p class="price">Rs.{items.price}.00</p>
-                        </div>
+                    <div className="menu_card" style={{position:'relative'}} key={items._id}>
+                      <div className="item_img">
+                      <img src ={items.img}alt="items"/>
                       </div>
-                  )
+                      <div className="item_details">
+                        <p class="title">{items.title}</p>
+                        <p class="details">{items.details}</p>
+                        <div className="menu_card_bottom_area">
+                        <Button variant="contained" className={classes.pricebtn}>Rs.{items.price}.00</Button>
+                        &nbsp;&nbsp;&nbsp;
+                        <Button variant ="contained" color="secondary" className={classes.addbtn} onClick={()=>AddItem(items)}>Add</Button>
+                        </div>
+                        </div>
+                    </div>
+                )
+                }
+                else
+                return null
               }))
           }
           </div>
@@ -107,19 +173,28 @@ export default function Menu() {
         <TabPanel value={value} index={1} dir={theme.direction}>
         <div className="menu_container">
           {
-              LunchMenu.map((items=>{
+              MenuArray.map((items=>{
+                if(items.type===2)
+                {
                   return(
-                      <div className="menu_card">
-                        <div className="item_img">
-                        <img src ={items.img}alt="items"/>
-                        </div>
-                        <div className="item_details">
-                          <p className="title">{items.title}</p>
-                          <p className="details">{items.details}</p>
-                          <p className="price">Rs.{items.price}.00</p>
+                    <div className="menu_card">
+                      <div className="item_img">
+                      <img src ={items.img}alt="items"/>
+                      </div>
+                      <div className="item_details">
+                        <p className="title">{items.title}</p>
+                        <p className="details">{items.details}</p>
+                        <div className="menu_card_bottom_area">
+                        <Button variant="contained" className={classes.pricebtn}>Rs.{items.price}.00</Button>
+                        &nbsp;&nbsp;&nbsp;
+                        <Button variant ="contained" color="secondary" className={classes.addbtn} onClick={()=>AddItem(items)}>Add</Button>
                         </div>
                       </div>
-                  )
+                    </div>
+                )
+                }
+                else 
+                return null
               }))
           }
           </div>
@@ -127,19 +202,27 @@ export default function Menu() {
         <TabPanel value={value} index={2} dir={theme.direction}>
         <div className="menu_container">
           {
-              BreadMenu.map((items=>{
+              MenuArray.map((items=>{
+                if(items.type===4)
+                {
                   return(
-                      <div className="menu_card">
-                        <div className="item_img">
-                        <img src ={items.img}alt="items"/>
-                        </div>
-                        <div className="item_details">
-                          <p className="title">{items.title}</p>
-                          <p className="details">{items.details}</p>
-                          <p className="price">Rs.{items.price}.00</p>
+                    <div className="menu_card">
+                      <div className="item_img">
+                      <img src ={items.img}alt="items"/>
+                      </div>
+                      <div className="item_details">
+                        <p className="title">{items.title}</p>
+                        <p className="details">{items.details}</p>
+                        <div className="menu_card_bottom_area">
+                        <Button variant="contained" className={classes.pricebtn}>Rs.{items.price}.00</Button>
+                        &nbsp;&nbsp;&nbsp;
+                        <Button variant ="contained" color="secondary" className={classes.addbtn} onClick={()=>AddItem(items)}>Add</Button>
                         </div>
                       </div>
-                  )
+                    </div>
+                )
+                }
+                else return null
               }))
           }
           </div>
@@ -147,19 +230,27 @@ export default function Menu() {
         <TabPanel value={value} index={3} dir={theme.direction}>
         <div className="menu_container">
           {
-              DrinksMenu.map((items=>{
-                  return(
-                      <div className="menu_card">
-                        <div className="item_img">
-                        <img src ={items.img}alt="items"/>
-                        </div>
-                        <div className="item_details">
-                          <p className="title">{items.title}</p>
-                          <p className="details">{items.details}</p>
-                          <p className="price">Rs.{items.price}.00</p>
-                        </div>
+             MenuArray.map((items=>{
+               if(items.type===3)
+               {
+                return(
+                  <div className="menu_card">
+                    <div className="item_img">
+                    <img src ={items.img}alt="items"/>
+                    </div>
+                    <div className="item_details">
+                      <p className="title">{items.title}</p>
+                      <p className="details">{items.details}</p>
+                      <div className="menu_card_bottom_area">
+                      <Button variant="contained" className={classes.pricebtn}>Rs.{items.price}.00</Button>
+                      &nbsp;&nbsp;&nbsp;
+                      <Button variant ="contained" color="secondary" className={classes.addbtn} onClick={()=>AddItem(items)}>Add</Button>
                       </div>
-                  )
+                    </div>
+                  </div>
+              )
+               }
+               else return null
               }))
           }
           </div>
@@ -167,8 +258,10 @@ export default function Menu() {
         <TabPanel value={value} index={4} dir={theme.direction}>
         <div className="menu_container">
           {
-              DessertMenu.map((items=>{
-                  return(
+              MenuArray.map((items=>{
+                if(items.type===5)
+                  {
+                    return(
                       <div className="menu_card">
                         <div className="item_img">
                         <img src ={items.img}alt="items"/>
@@ -176,15 +269,80 @@ export default function Menu() {
                         <div className="item_details">
                           <p className="title">{items.title}</p>
                           <p className="details">{items.details}</p>
-                          <p className="price">Rs.{items.price}.00</p>
+                          <div className="menu_card_bottom_area">
+                          <Button variant="contained" className={classes.pricebtn}>Rs.{items.price}.00</Button>
+                          &nbsp;&nbsp;&nbsp;
+                          <Button variant ="contained" color="secondary" className={classes.addbtn} onClick={()=>AddItem(items)}>Add</Button>
+                          </div>
                         </div>
                       </div>
                   )
+                }
+                else return null
               }))
           }
           </div>
         </TabPanel>
       </SwipeableViews>
+      {
+        OpenOrder?
+        <div className="Current_order_Container">
+        <div className="Current_order_box">
+          <button className="closebtn" onClick={()=>setOpenOrder(false)}>X</button>
+          <h2>Current Order</h2>
+             {
+               CurrOrder.length>0?
+               <>
+            <table className="order_table">
+            <tr>
+            <th>Id</th>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Action</th>
+            </tr>
+            <tbody>
+               {
+
+                 CurrOrder.map(items=>{
+                   i++;
+                   totalPrice=totalPrice+parseInt(items.item.price)
+                  return(
+                    <tr>
+                      <td>{i}</td>
+                      <td><img src={items.item.img} alt="" width="50" height="50" className="food_img"/></td>
+                      <td>{items.item.title}</td>
+                      <td>Rs.{items.item.price}</td>
+                      <td><Button variant="outlined"color="secondary">Remove</Button></td>
+                    </tr>
+                  )
+                  
+                }
+                )
+               }
+               <tr>
+                <td colspan="3" style={{textAlign:'center',fontWeight:'550',fontSize:'20px'}}>Total</td>
+                <td colspan="2" style={{textAlign:'center',fontWeight:'550',fontSize:'20px'}}>Rs. {totalPrice}.00/-</td>
+               </tr>
+               </tbody>
+               </table>
+               <div>
+              <Button variant="contained" color="Primary">Confirm Order</Button>&nbsp;&nbsp;
+              <Button variant="contained" color="secondary" onClick={ClearOrder}>Clear Order</Button>
+              </div>
+               </>
+               :  
+               <div style={{display:'flex',alignItems:'center',justifyContent:'center',width:'100% '}}>
+               <p style={{textAlign:'center',fontSize:'20px'}}>
+               You have not ordered anything. 
+                </p>
+            </div>
+             }
+        </div>
+      </div>
+      :null
+      }
+      <Button className={classes.orderbtn}onClick={()=>setOpenOrder(true)}>Current Order</Button>
     </div>
   );
 }
