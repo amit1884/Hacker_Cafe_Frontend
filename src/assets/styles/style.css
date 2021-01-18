@@ -291,8 +291,8 @@ background-color: rgba(0,0,0,0.6);
     box-shadow: 1px 2px 10px lightgray;
     border-radius: 10px;
     padding:20px;
-    min-height: 200px;
-    min-width: 200px;
+    min-height: 300px;
+    min-width: 300px;
 }
 .closebtn{
     position: absolute;

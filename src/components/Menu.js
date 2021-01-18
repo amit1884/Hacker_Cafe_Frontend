@@ -236,7 +236,7 @@ export default function Menu() {
                 return(
                   <div className="menu_card">
                     <div className="item_img">
-                    <img src ={items.img}alt="items"/>
+                    <img src ={items.img} alt="items"/>
                     </div>
                     <div className="item_details">
                       <p className="title">{items.title}</p>
