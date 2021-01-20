@@ -10,8 +10,9 @@ import Box from '@material-ui/core/Box';
 import {Button} from '@material-ui/core'
 import _ from 'lodash'
 import axios from 'axios';
-var i=0;
-var totalPrice=0;
+import food from '../assets/images/food.png'
+import {Radio,FormControlLabel,RadioGroup,} from '@material-ui/core';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
  
@@ -54,7 +55,13 @@ const useStyles = makeStyles((theme) => ({
     background:'orange',
     fontSize:'20px',
     fontWeight:'500',
-    color:'#fff'
+    color:'#fff',
+    '&:hover':{
+      background:'orange',
+      fontSize:'20px',
+      fontWeight:'500',
+      color:'#fff',
+    }
   },
   addbtn:{
     // background:'orange',
@@ -77,10 +84,21 @@ export default function Menu() {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
-  // const [AddStatus,setAddStatus]=useState(true)
+  const [time,settime]=useState('')
   const [MenuArray,setMenuArray]=useState([])
   const [CurrOrder,setCurrOrder]=useState([])
   const [OpenOrder,setOpenOrder]=useState(false)
+  const [Total,setTotal]=useState(0)
+  const [IsDisabled,setIsDisabled]=useState(true)
+  const [RadioValue,setRadioValue]=useState('')
+  const [Confirm,setConfirm]=useState(false)
+  const [cardData,setcardData]=useState({
+    number:'',
+    name:'',
+    expiry:'',
+    cvv:''
+  })
+  // Getting the list of menus
   useEffect(()=>{
 
     axios.get(`http://localhost:5000/menu`,{
@@ -94,6 +112,13 @@ export default function Menu() {
     })
     .catch(err=>console.log(err))
   },[])
+  const handleRadio=(value)=>{
+    setRadioValue(value)
+    if(value==='COD'||value==='CARD')
+    setIsDisabled(false)
+    else
+    setIsDisabled(true)
+  }
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -101,21 +126,68 @@ export default function Menu() {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
-
+// Adding order to current order list
  const AddItem=(item)=>{
   console.log(item) 
-  let newData=[...CurrOrder,{item}]
+  let newData=[...CurrOrder,
+    {_id:item._id,
+      title:item.title,
+      type:item.type,
+      details:item.details,
+      price:item.price,
+      qty:item.qty,
+      img:item.img
+    }]
+    setTotal(Total+parseInt(item.price))
   setCurrOrder(newData)
   // localStorage.setItem('Order',JSON.stringify(CurrOrder))
   console.log(CurrOrder)
  }
- const RemoveItem=(item)=>{
-  let newData=CurrOrder;
-  newData=newData.pull()
+//  Removing single item from current order list
+ const RemoveItem=(item,data)=>{
+  console.log(item)
+  if(CurrOrder.length===1)
+  {
+  setCurrOrder([])
+  setTotal(0)
+  }
+  else{
+   let arr=[...CurrOrder]
+   arr.splice(item,1)
+   console.log(arr)
+   setTotal(Total-parseInt(data.price))
+   setCurrOrder(arr)
+  }
  }
+//  Clearing the current order list
  const ClearOrder=()=>{
    console.log('order clear')
    setCurrOrder([])
+ }
+
+//  Adding order in users Order history
+
+ const AddOrder=()=>{
+  axios.post(`http://localhost:5000/addorder`,{
+    currOrder:CurrOrder
+  },{
+    headers:{
+      "Authorization":"Bearer "+localStorage.getItem('jwt')
+    }
+  })
+  .then(res=>{
+    console.log('Order Added ',res.data)
+    setConfirm(true)
+    settime(res.data.time)
+  })
+  .catch(err=>console.log(err))
+ }
+// Card form for Payment 
+ const handleCard=(e)=>{
+   const values={cardData}
+   console.log(values)
+  values[e.target.name]=e.target.value
+  setcardData(values)
  }
 
   return (
@@ -129,8 +201,8 @@ export default function Menu() {
           variant="fullWidth"
           aria-label="full width tabs example"
         >
-          <Tab label="Breakfast" {...a11yProps(0)} />
-          <Tab label="Lunch" {...a11yProps(1)} />
+          <Tab label="Starters" {...a11yProps(0)} />
+          <Tab label="MainCourse" {...a11yProps(1)} />
           <Tab label="Breads" {...a11yProps(2)} />
           <Tab label="Drinks" {...a11yProps(3)} />
           <Tab label="Desserts" {...a11yProps(4)} />
@@ -185,7 +257,7 @@ export default function Menu() {
                         <p className="title">{items.title}</p>
                         <p className="details">{items.details}</p>
                         <div className="menu_card_bottom_area">
-                        <Button variant="contained" className={classes.pricebtn}>Rs.{items.price}.00</Button>
+                        <Button variant="contained" className={classes.pricebtn}>Rs.{Total}.00</Button>
                         &nbsp;&nbsp;&nbsp;
                         <Button variant ="contained" color="secondary" className={classes.addbtn} onClick={()=>AddItem(items)}>Add</Button>
                         </div>
@@ -284,16 +356,18 @@ export default function Menu() {
           </div>
         </TabPanel>
       </SwipeableViews>
+
+      {/* Current Order List . */}
       {
         OpenOrder?
         <div className="Current_order_Container">
         <div className="Current_order_box">
           <button className="closebtn" onClick={()=>setOpenOrder(false)}>X</button>
-          <h2>Current Order</h2>
              {
                CurrOrder.length>0?
                <>
             <table className="order_table">
+            <tr><td colSpan="5"><h3 style={{textAlign:'center',}}>Current Order</h3></td></tr>
             <tr>
             <th>Id</th>
             <th>Image</th>
@@ -303,17 +377,14 @@ export default function Menu() {
             </tr>
             <tbody>
                {
-
-                 CurrOrder.map(items=>{
-                   i++;
-                   totalPrice=totalPrice+parseInt(items.item.price)
+                 CurrOrder.map((items,index)=>{
                   return(
                     <tr>
-                      <td>{i}</td>
-                      <td><img src={items.item.img} alt="" width="50" height="50" className="food_img"/></td>
-                      <td>{items.item.title}</td>
-                      <td>Rs.{items.item.price}</td>
-                      <td><Button variant="outlined"color="secondary">Remove</Button></td>
+                      <td>{index+1}</td>
+                      <td><img src={items.img} alt="" width="50" height="50" className="food_img"/></td>
+                      <td>{items.title}</td>
+                      <td>Rs.{items.price}</td>
+                      <td><Button variant="outlined"color="secondary" onClick={()=>RemoveItem(index,items)}disabled={Confirm}>Remove</Button></td>
                     </tr>
                   )
                   
@@ -321,15 +392,45 @@ export default function Menu() {
                 )
                }
                <tr>
-                <td colspan="3" style={{textAlign:'center',fontWeight:'550',fontSize:'20px'}}>Total</td>
-                <td colspan="2" style={{textAlign:'center',fontWeight:'550',fontSize:'20px'}}>Rs. {totalPrice}.00/-</td>
+                <td colSpan="3" style={{textAlign:'center',fontWeight:'550',fontSize:'20px'}}>Total</td>
+                <td colSpan="2" style={{textAlign:'center',fontWeight:'550',fontSize:'20px'}}>Rs. {Total}.00/-</td>
                </tr>
+              {
+                Confirm?
+                <tr>
+                <td colSpan="5">
+                    <p>Order placed successfully !!!</p>
+                    <p>Your order will be ready in {time}.</p>
+                </td>
+              </tr>:null
+              }
                </tbody>
                </table>
-               <div>
-              <Button variant="contained" color="Primary">Confirm Order</Button>&nbsp;&nbsp;
-              <Button variant="contained" color="secondary" onClick={ClearOrder}>Clear Order</Button>
-              </div>
+               <div className="payment_side">
+                <RadioGroup aria-label="Required" name="payment_mode" value={RadioValue} onChange={(e)=>handleRadio(e.target.value)}>
+                <FormControlLabel value="COD" control={<Radio />} label="Cash on delivery" />
+                <FormControlLabel value="CARD" control={<Radio />} label="Credit Card" />
+                </RadioGroup>
+                  {
+                    RadioValue==='CARD'?
+                    <div className="payment_card">
+                      <label>Card Number</label><br/>
+                      <input type="text" name="number" value={cardData.number} onChange={(e)=>handleCard(e)}placeholder="Card Number"/><br/>
+                      <label>Name</label><br/>
+                      <input type="text" name="name" value={cardData.name} onChange={(e)=>handleCard(e)}placeholder="Owner Name"/><br/>
+                      <label>Expiry</label><br/>
+                      <input type="text" name="expiry" value={cardData.expiry} onChange={(e)=>handleCard(e)}placeholder="MM/YY"/><br/>
+                      <label>CVV</label><br/>
+                      <input type="text" name="cvv" value={cardData.cvv} onChange={(e)=>handleCard(e)}placeholder="cvv"/><br/>
+                      {/* <button style={{border:'none',background:"#E2075B",outline:'none',color:'#fff',padding:'5px',cursor:'pointer'}} onClick={()=>setIsDisabled(false)}>Submit</button> */}
+                    </div>
+                    :null
+                  }
+                <div style={{display:'flex',justifyContent:'space-around'}}>
+                <button  className="placeorder_btn"onClick={AddOrder} disabled={IsDisabled}>Place Order</button>&nbsp;&nbsp;
+                <button style={{border:'none',background:"#E2075B",outline:'none',color:'#fff',padding:'10px',cursor:'pointer'}} onClick={ClearOrder}>Clear Order</button>
+                </div>
+               </div>
                </>
                :  
                <div style={{display:'flex',alignItems:'center',justifyContent:'center',width:'100% '}}>
@@ -342,7 +443,10 @@ export default function Menu() {
       </div>
       :null
       }
-      <Button className={classes.orderbtn}onClick={()=>setOpenOrder(true)}>Current Order</Button>
+      <button className='food_btn  animate__animated  animate__tada'onClick={()=>setOpenOrder(true)}>
+        <img src ={food} alt="" width="80" height="80"/>
+        <p style={{color:'#fff',background:'darkblue',padding:'3px',borderRadius:'5px'}}>Checkout</p>
+      </button>
     </div>
   );
 }

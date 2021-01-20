@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
+import Profile from './Pages/Profile'
 import {reducer,initialState} from "./Reducers/userReducer"
 export const UserContext=createContext()
 const Routing=()=>{
@@ -34,6 +35,9 @@ const Routing=()=>{
       </Route>
       <Route path="/signup">
         <SignUp/>
+      </Route>
+      <Route path="/profile">
+        <Profile/>
       </Route>
     </Switch>
   )

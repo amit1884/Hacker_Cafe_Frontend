@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Carousel from '../components/Carousel'
 import '../assets/styles/style.css'
 import Menu from '../components/Menu'
+import Footer from '../components/Footer'
 class Home extends Component {
     render() {
         return (
@@ -17,7 +18,7 @@ class Home extends Component {
                 <div style={{display:'flex',justifyContent:'center'}} >
                     <Menu/>
                 </div>
-                
+                <Footer/>
             </div>
         )
     }

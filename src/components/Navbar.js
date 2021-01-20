@@ -99,8 +99,11 @@ function NavBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem>
+               <Link to ="/profile">
+               Profile
+               </Link>
+                </MenuItem>
                 <MenuItem onClick={Logout}>Logout</MenuItem>
               </Menu>
                  </>
