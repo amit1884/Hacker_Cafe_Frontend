@@ -436,3 +436,41 @@ background-color: rgba(0,0,0,0.6);
     border: none;
     border-bottom: 1px solid #000;
 }
+.user_details{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.order_history{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    /* justify-content: space-between; */
+    align-items: center;
+}
+.order_history table{
+    background-color: #ffff;
+    box-shadow: 1px 2px 10px lightgray;
+    border-radius: 10px;
+    width:90%;
+    margin:10px
+}
+.order_history table td{
+    padding:10px;
+    /* border:1px solid lightgray; */
+    text-align: center;
+}
+.order_history table th{
+    font-size: 18px;
+    font-weight: 600;
+    /* border:1px solid lightgray; */
+}
+.user_table table{
+    width:100%;
+    background-color: #ffff;
+    box-shadow: 1px 2px 10px lightgray;
+    border-radius: 10px;
+}
+.user_table table td{
+    padding:10px;
+}

@@ -387,7 +387,6 @@ export default function Menu() {
                       <td><Button variant="outlined"color="secondary" onClick={()=>RemoveItem(index,items)}disabled={Confirm}>Remove</Button></td>
                     </tr>
                   )
-                  
                 }
                 )
                }
