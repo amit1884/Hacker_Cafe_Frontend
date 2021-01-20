@@ -179,6 +179,7 @@ export default function Menu() {
     console.log('Order Added ',res.data)
     setConfirm(true)
     settime(res.data.time)
+    setIsDisabled(true)
   })
   .catch(err=>console.log(err))
  }
@@ -189,7 +190,13 @@ export default function Menu() {
   values[e.target.name]=e.target.value
   setcardData(values)
  }
-
+// Setting default state for new Order
+ const NewOrder=()=>{
+   setConfirm(false)
+   settime('')
+   setCurrOrder([])
+   setIsDisabled(true)
+ }
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
@@ -428,6 +435,7 @@ export default function Menu() {
                 <div style={{display:'flex',justifyContent:'space-around'}}>
                 <button  className="placeorder_btn"onClick={AddOrder} disabled={IsDisabled}>Place Order</button>&nbsp;&nbsp;
                 <button style={{border:'none',background:"#E2075B",outline:'none',color:'#fff',padding:'10px',cursor:'pointer'}} onClick={ClearOrder}>Clear Order</button>
+                <button style={{border:'none',background:"orange",outline:'none',color:'#fff',padding:'10px',cursor:'pointer'}} onClick={NewOrder}>New Order</button>
                 </div>
                </div>
                </>
