@@ -100,7 +100,7 @@ export default function Menu() {
   // Getting the list of menus
   useEffect(()=>{
 
-    axios.get(`http://localhost:5000/menu`,{
+    axios.get(`https://hackercafe.herokuapp.com/menu`,{
       headers:{
         "Authorization":"Bearer "+localStorage.getItem('jwt')
       }
@@ -167,7 +167,7 @@ export default function Menu() {
 //  Adding order in users Order history
 
  const AddOrder=()=>{
-  axios.post(`http://localhost:5000/addorder`,{
+  axios.post(`https://hackercafe.herokuapp.com/addorder`,{
     currOrder:CurrOrder
   },{
     headers:{

@@ -7,7 +7,7 @@ function Profile() {
     useEffect(()=>{
         console.log('Local ',JSON.parse(localStorage.getItem('user')))
         const LocalData=JSON.parse(localStorage.getItem('user'))
-        axios.get(`http://localhost:5000/user/${LocalData._id}`,{
+        axios.get(`https://hackercafe.herokuapp.com/user/${LocalData._id}`,{
             headers:{
                 "Authorization":"Bearer "+localStorage.getItem('jwt')
             }

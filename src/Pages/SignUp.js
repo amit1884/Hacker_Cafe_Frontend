@@ -1,7 +1,7 @@
 import React ,{useState,useRef}from 'react'
 import {Link,useHistory} from 'react-router-dom'
 import Preview from '../components/Preview';
-const Backend_url='http://localhost:5000'
+const Backend_url='https://hackercafe.herokuapp.com'
 function SignUp() {
     const textInput = useRef(null);
     const history=useHistory()
