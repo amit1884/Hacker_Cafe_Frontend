@@ -434,7 +434,7 @@ export default function Menu() {
                   }
                 <div style={{display:'flex',justifyContent:'space-around'}}>
                 <button  className="placeorder_btn"onClick={AddOrder} disabled={IsDisabled}>Place Order</button>&nbsp;&nbsp;
-                <button style={{border:'none',background:"#E2075B",outline:'none',color:'#fff',padding:'10px',cursor:'pointer'}} onClick={ClearOrder}>Clear Order</button>
+                <button style={{border:'none',background:"#E2075B",outline:'none',color:'#fff',padding:'10px',cursor:'pointer'}} onClick={ClearOrder}>Clear Order</button>&nbsp;&nbsp;&nbsp;
                 <button style={{border:'none',background:"orange",outline:'none',color:'#fff',padding:'10px',cursor:'pointer'}} onClick={NewOrder}>New Order</button>
                 </div>
                </div>
