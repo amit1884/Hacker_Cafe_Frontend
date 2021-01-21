@@ -19,8 +19,8 @@ function Profile() {
         .catch(err=>console.log(err))
     },[])
     return (
-        <div className="user_profile_conatiner">
-            <div style={{height:'100px'}}></div>
+        <div className="user_profile_conatiner"  style={{overflowX:'hidden'}}>
+            <div className="divider"></div>
             <div className="user_details">
                 <div className="user_table">
                     <table>

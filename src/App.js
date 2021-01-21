@@ -5,7 +5,9 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
 import Profile from './Pages/Profile'
+import MobileNav from './components/MobileNav'
 import {reducer,initialState} from "./Reducers/userReducer"
+import Media from 'react-media';
 export const UserContext=createContext()
 const Routing=()=>{
 
@@ -48,7 +50,17 @@ function App() {
   return (
       <UserContext.Provider value ={{state,dispatch}}>
         <BrowserRouter>
-          <Navbar/>
+        <Media queries={{
+          small: "(max-width: 991px)",
+          large: "(min-width: 991px)"
+        }}>
+          {matches => (
+            <React.Fragment>
+              {matches.small && <MobileNav/>}
+              {matches.large && <Navbar/>}
+            </React.Fragment>
+          )}
+        </Media>
           <Routing/>
         </BrowserRouter>
       </UserContext.Provider>

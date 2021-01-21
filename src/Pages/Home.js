@@ -8,7 +8,7 @@ class Home extends Component {
         return (
             <div>
                 <Carousel/>
-                <div className="menu_button_container">
+                <div className="menu_button_container" style={{overflowX:'hidden'}}>
                     <div className="menu_button" id="menu" >
                         <p>Menu</p>
                     </div>

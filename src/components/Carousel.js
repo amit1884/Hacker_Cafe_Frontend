@@ -17,8 +17,9 @@ function Carousel() {
         autoplaySpeed:2000,
       };
     return (
-        <Slider {...settings} style={{overflow:'hidden'}}>
-                <div className="banner_image">
+        <div style={{overflowX:'hidden'}}>
+            <Slider {...settings} style={{overflow:'hidden'}}>
+                <div className="banner_image" style={{overflow:'hidden'}}>
                     <img src ={img1} alt=""/>
                     <div className="banner_text">
                         <div className="inner_text_area">
@@ -27,7 +28,7 @@ function Carousel() {
                         </div>
                     </div>
                 </div>
-                <div className="banner_image">
+                <div className="banner_image"  style={{overflow:'hidden'}}>
                     <img src ={img2} alt=""/>
                     <div className="banner_text">
                         <div className="inner_text_area">
@@ -36,7 +37,7 @@ function Carousel() {
                         </div>
                     </div>
                 </div>
-                <div className="banner_image">
+                <div className="banner_image"  style={{overflow:'hidden'}}>
                     <img src ={img3} alt=""/>
                     <div className="banner_text">
                         <div className="inner_text_area">
@@ -46,7 +47,9 @@ function Carousel() {
                     </div>
                 </div>
         </Slider>
-    )
+
+        </div>   
+         )
 }
 
 export default Carousel

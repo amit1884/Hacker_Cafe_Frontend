@@ -7,10 +7,12 @@ function Login() {
     const [Password,setPassword]=useState('')
     const [Error,setError]=useState(false)
     const [ErrorMsg,setErrorMsg]=useState('')
+    const [Loading,setLoading]=useState(false)
     const {dispatch}=useContext(UserContext)
     const history=useHistory();
     const SubmitHandler=(e)=>{
         e.preventDefault()
+        setLoading(true)
         if(Email===''||Password==='')
         {
             setErrorMsg('All Fields are required !!')
@@ -33,12 +35,14 @@ function Login() {
                 if(data.status===0){
                     setError(true)
                     setErrorMsg(data.message)
+                    setLoading(false)
                 }
                 else if(data.status===1){
                     localStorage.setItem("jwt",data.token)
                     localStorage.setItem("user",JSON.stringify(data.user))
                     dispatch({type:"USER",payload:data.user})
                     console.log("Logged In Successfully")
+                    setLoading(false)
                     history.push('/')
                 }
             })
@@ -57,7 +61,7 @@ function Login() {
                 <form className="form_container" onSubmit={SubmitHandler}>
                     <input type="text" placeholder="amit@microsoft.com" value={Email} onChange={(e)=>setEmail(e.target.value)}/>
                     <input type="password" placeholder="123456" value={Password} onChange={(e)=>setPassword(e.target.value)}/>
-                    <button className="login_btn">Login</button>
+                    <button className="login_btn">{Loading?"Loading....":"Login"}</button>
                 </form>
                <Link to ='/signup'>Don't have an account?</Link>
         </div>
