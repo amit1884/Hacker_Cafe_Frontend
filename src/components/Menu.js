@@ -8,7 +8,6 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import {Button} from '@material-ui/core'
-import _ from 'lodash'
 import axios from 'axios';
 import food from '../assets/images/food.png'
 import {Radio,FormControlLabel,RadioGroup,} from '@material-ui/core';
